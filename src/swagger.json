@@ -1,0 +1,614 @@
+{
+	"swagger": "2.0",
+	"info": {
+		"version": "1.0.0",
+		"title": "Polz rest api server",
+		"description": "Polz Node.js Application API",
+		"license": {
+			"name": "MIT",
+			"url": "https://opensource.org/licenses/MIT"
+		}
+	},
+	"host": "localhost:3000",
+	"basePath": "/api/v1",
+	"tags": [
+		{
+			"name": "Users",
+			"description": "API for users in the system"
+		},
+		{
+			"name": "Polls",
+			"description": "API for Polls in the system"
+		},
+		{
+			"name": "Categories",
+			"description": "API for polls categoreis in the system"
+		}
+	],
+	"schemes": [
+		"http",
+		"https"
+	],
+	"consumes": [
+		"application/json"
+	],
+	"produces": [
+		"application/json"
+	],
+	"paths": {
+		"/users": {
+			"post": {
+				"tags": [
+					"Users"
+				],
+				"description": "Create new user in system",
+				"parameters": [
+					{
+						"name": "user",
+						"in": "body",
+						"description": "User that we want to create",
+						"schema": {
+							"$ref": "#/definitions/User"
+						}
+					}
+				],
+				"produces": [
+					"application/json"
+				],
+				"responses": {
+					"200": {
+						"description": "New user is created",
+						"schema": {
+							"$ref": "#/definitions/User"
+						}
+					}
+				}
+			},
+			"get": {
+				"tags": [
+					"Users"
+				],
+				"summary": "Get all users in system",
+				"responses": {
+					"200": {
+						"description": "OK",
+						"schema": {
+							"$ref": "#/definitions/Users"
+						}
+					}
+				}
+			}
+		},
+		"/users/{userId}": {
+			"parameters": [
+				{
+					"name": "userId",
+					"in": "path",
+					"required": true,
+					"description": "ID of user that we want to find",
+					"type": "string"
+				}
+			],
+			"get": {
+				"tags": [
+					"Users"
+				],
+				"summary": "Get user with given ID",
+				"responses": {
+					"200": {
+						"description": "User is found",
+						"schema": {
+							"$ref": "#/definitions/User"
+						}
+					}
+				}
+			},
+			"delete": {
+				"summary": "Delete user with given ID",
+				"tags": [
+					"Users"
+				],
+				"responses": {
+					"200": {
+						"description": "User is deleted",
+						"schema": {
+							"$ref": "#/definitions/User"
+						}
+					}
+				}
+			},
+			"put": {
+				"summary": "Update user with give ID",
+				"tags": [
+					"Users"
+				],
+				"parameters": [
+					{
+						"name": "user",
+						"in": "body",
+						"description": "User with new values of properties",
+						"schema": {
+							"$ref": "#/definitions/User"
+						}
+					}
+				],
+				"responses": {
+					"200": {
+						"description": "User is updated",
+						"schema": {
+							"$ref": "#/definitions/User"
+						}
+					}
+				}
+			}
+		},
+		"/polls": {
+			"post": {
+				"tags": [
+					"Polls"
+				],
+				"description": "Create new poll in system",
+				"parameters": [
+					{
+						"name": "poll",
+						"in": "body",
+						"description": "poll that we want to create",
+						"schema": {
+							"$ref": "#/definitions/Poll"
+						}
+					}
+				],
+				"produces": [
+					"application/json"
+				],
+				"responses": {
+					"200": {
+						"description": "New poll is created",
+						"schema": {
+							"$ref": "#/definitions/Poll"
+						}
+					}
+				}
+			},
+			"get": {
+				"tags": [
+					"Polls"
+				],
+				"summary": "Get all polls in system",
+				"responses": {
+					"200": {
+						"description": "OK",
+						"schema": {
+							"$ref": "#/definitions/Polls"
+						}
+					}
+				}
+			}
+		},
+		"/polls/{pollId}": {
+			"parameters": [
+				{
+					"name": "pollId",
+					"in": "path",
+					"required": true,
+					"description": "ID of poll that we want to find",
+					"type": "number"
+				}
+			],
+			"get": {
+				"tags": [
+					"Polls"
+				],
+				"summary": "Get poll with given ID",
+				"responses": {
+					"200": {
+						"description": "poll is found",
+						"schema": {
+							"$ref": "#/definitions/Poll"
+						}
+					}
+				}
+			},
+			"delete": {
+				"summary": "Delete poll with given ID",
+				"tags": [
+					"Polls"
+				],
+				"responses": {
+					"200": {
+						"description": "Poll is deleted",
+						"schema": {
+							"$ref": "#/definitions/Poll"
+						}
+					}
+				}
+			},
+			"put": {
+				"summary": "Update poll with give ID",
+				"tags": [
+					"Polls"
+				],
+				"parameters": [
+					{
+						"name": "poll",
+						"in": "body",
+						"description": "Poll with new values of properties",
+						"schema": {
+							"$ref": "#/definitions/Poll"
+						}
+					}
+				],
+				"responses": {
+					"200": {
+						"description": "Poll is updated",
+						"schema": {
+							"$ref": "#/definitions/Poll"
+						}
+					}
+				}
+			}
+		},
+		"/polls/{UserId}/all": {
+			"parameters": [
+				{
+					"name": "UserId",
+					"in": "path",
+					"required": true,
+					"description": "ID of user that we want to find his/her polls",
+					"type": "number"
+				}
+			],
+			"get": {
+				"tags": [
+					"Polls"
+				],
+				"summary": "Get all polls with given user ID",
+				"responses": {
+					"200": {
+						"description": "polls  found",
+						"schema": {
+							"$ref": "#/definitions/Polls"
+						}
+					}
+				}
+			}
+		},
+		"/categories": {
+			"post": {
+				"tags": [
+					"Categories"
+				],
+				"description": "Create new category in system",
+				"parameters": [
+					{
+						"name": "poll",
+						"in": "body",
+						"description": "poll that we want to create",
+						"schema": {
+							"$ref": "#/definitions/Category"
+						}
+					}
+				],
+				"produces": [
+					"application/json"
+				],
+				"responses": {
+					"200": {
+						"description": "New category is created",
+						"schema": {
+							"$ref": "#/definitions/Category"
+						}
+					}
+				}
+			},
+			"get": {
+				"tags": [
+					"Categories"
+				],
+				"summary": "Get all categories in system",
+				"responses": {
+					"200": {
+						"description": "OK",
+						"schema": {
+							"$ref": "#/definitions/Categories"
+						}
+					}
+				}
+			}
+		},
+		"/categories/{categoryId}": {
+			"parameters": [
+				{
+					"name": "categoryId",
+					"in": "path",
+					"required": true,
+					"description": "ID of category that we want to find",
+					"type": "number"
+				}
+			],
+			"get": {
+				"tags": [
+					"Categories"
+				],
+				"summary": "Get category with given ID",
+				"responses": {
+					"200": {
+						"description": "Category is found",
+						"schema": {
+							"$ref": "#/definitions/Category"
+						}
+					}
+				}
+			},
+			"delete": {
+				"summary": "Delete category with given ID",
+				"tags": [
+					"Categories"
+				],
+				"responses": {
+					"200": {
+						"description": "Category is deleted",
+						"schema": {
+							"$ref": "#/definitions/Category"
+						}
+					}
+				}
+			},
+			"put": {
+				"summary": "Update category with give ID",
+				"tags": [
+					"Categories"
+				],
+				"parameters": [
+					{
+						"name": "category",
+						"in": "body",
+						"description": "Poll with new values of properties",
+						"schema": {
+							"$ref": "#/definitions/Category"
+						}
+					}
+				],
+				"responses": {
+					"200": {
+						"description": "Category is updated",
+						"schema": {
+							"$ref": "#/definitions/Category"
+						}
+					}
+				}
+			}
+		},
+		"/categories/{PollId}/all": {
+			"parameters": [
+				{
+					"name": "PollId",
+					"in": "path",
+					"required": true,
+					"description": "ID of poll that we want to find its categories",
+					"type": "number"
+				}
+			],
+			"get": {
+				"tags": [
+					"Categories"
+				],
+				"summary": "Get all polls with given poll ID",
+				"responses": {
+					"200": {
+						"description": "polls  found",
+						"schema": {
+							"$ref": "#/definitions/Polls"
+						}
+					}
+				}
+			}
+		},
+		"/participants": {
+			"post": {
+				"tags": [
+					"Participants"
+				],
+				"description": "Create new participant in system",
+				"parameters": [
+					{
+						"name": "poll",
+						"in": "body",
+						"description": "poll that we want to create",
+						"schema": {
+							"$ref": "#/definitions/Participant"
+						}
+					}
+				],
+				"produces": [
+					"application/json"
+				],
+				"responses": {
+					"200": {
+						"description": "New participant is created",
+						"schema": {
+							"$ref": "#/definitions/Participant"
+						}
+					}
+				}
+			},
+			"get": {
+				"tags": [
+					"Participants"
+				],
+				"summary": "Get all participants in system",
+				"responses": {
+					"200": {
+						"description": "OK",
+						"schema": {
+							"$ref": "#/definitions/Participants"
+						}
+					}
+				}
+			}
+		},
+		"/participants/{participantId}": {
+			"parameters": [
+				{
+					"name": "participantId",
+					"in": "path",
+					"required": true,
+					"description": "ID of participant that we want to find",
+					"type": "number"
+				}
+			],
+			"get": {
+				"tags": [
+					"Participants"
+				],
+				"summary": "Get participant with given ID",
+				"responses": {
+					"200": {
+						"description": "participant is found",
+						"schema": {
+							"$ref": "#/definitions/Participant"
+						}
+					}
+				}
+			},
+			"delete": {
+				"summary": "Delete participant with given ID",
+				"tags": [
+					"Participants"
+				],
+				"responses": {
+					"200": {
+						"description": "participant is deleted",
+						"schema": {
+							"$ref": "#/definitions/Participant"
+						}
+					}
+				}
+			},
+			"put": {
+				"summary": "Update participant with give ID",
+				"tags": [
+					"Participants"
+				],
+				"parameters": [
+					{
+						"name": "participant",
+						"in": "body",
+						"description": "Poll with new values of properties",
+						"schema": {
+							"$ref": "#/definitions/Participant"
+						}
+					}
+				],
+				"responses": {
+					"200": {
+						"description": "participant is updated",
+						"schema": {
+							"$ref": "#/definitions/Participant"
+						}
+					}
+				}
+			}
+		},
+		"/participants/{categoryId}/all": {
+			"parameters": [
+				{
+					"name": "category",
+					"in": "path",
+					"required": true,
+					"description": "ID of category that we want to find its participants",
+					"type": "number"
+				}
+			],
+			"get": {
+				"tags": [
+					"Participants"
+				],
+				"summary": "Get all participants with given category ID",
+				"responses": {
+					"200": {
+						"description": "participants found",
+						"schema": {
+							"$ref": "#/definitions/participants"
+						}
+					}
+				}
+			}
+		}
+	},
+	"securityDefinitions": {
+		"jwt": {
+			"type": "apiKey",
+			"in": "header",
+			"name": "Authorization"
+		}
+	},
+	"security": [
+		{
+			"jwt": []
+		}
+	],
+	"definitions": {
+		"User": {
+			"required": [
+				"phone",
+				"firstName",
+				"lastName",
+				"password"
+			],
+			"properties": {
+				"phone": { "type": "string" },
+				"firstName": { "type": "string" },
+				"lastName": { "type": "string" },
+				"email": { "type": "string" },
+				"password": { "type": "string" }
+			}
+		},
+		"Users": {
+			"type": "array",
+			"$ref": "#/definitions/User"
+		},
+		"Poll": {
+			"type": "object",
+			"properties": {
+				"name": { "type": "string" },
+				"about": { "type": "string" },
+				"unitCost": { "type": "number" },
+				"userId": { "type": "number" },
+				"expired": { "type": "boolean" },
+				"freePoll": { "type": "boolean" },
+				"expiryDate": { "type": "string" }
+			},
+			"required": [
+				"name",
+				"expiryDate",
+				"userId"
+			]
+		},
+		"Polls": {
+			"type": "array",
+			"$ref": "#/definitions/Poll"
+		},
+		"Category": {
+			"type": "object",
+			"properties": {
+				"title": { "type": "string" },
+				"pollId": { "type": "string" }
+			},
+			"required": [
+				"id",
+				"title",
+				"pollId"
+			]
+		},
+		"Categories": {
+			"type": "array",
+			"$ref": "#/definitions/Category"
+		},
+		"Participants": {
+			"name": { "type": "string" },
+			"image": { "type": "string" },
+			"categoryId": { "type": "number" }
+		}
+	}
+}

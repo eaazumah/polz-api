@@ -1,156 +1,194 @@
-import express from "express";
-import uuidv4 from "uuid/v4";
-import bcrypt from "bcrypt";
-import status from "http-status";
-import * as pollController from "../controllers/controllers.polls";
-import * as pollModel from "../models/models.poll";
-import * as metaController from "../controllers/controllers.meta";
-import redis from "redis";
+import express from 'express';
+import uuidv4 from 'uuid/v4';
+import status from 'http-status';
+import * as pollController from '../controllers/controllers.polls';
+import * as pollSchema from '../schema/poll.schema';
+import redis from 'redis';
+import menu from '../util/menu';
+import { Poll } from '../models/poll.model';
 
 const client = redis.createClient();
-
 const router = express.Router();
 
-router.get("/polls", (_req, res) => {
-	pollController
-		.readAll()
+router.get('/polls', (_req, res) => {
+	Poll.findAll()
 		.then((polls) => {
-			console.log(polls);
-			res.send(polls);
+			res.status(status.OK).send(polls);
 		})
-		.catch(() => {
-			res.status(status.INTERNAL_SERVER_ERROR).json({
-				message: "internal server error"
-			});
+		.catch((error) => {
+			res.status(status.INTERNAL_SERVER_ERROR).send(error);
 		});
 });
 
-router.get("/polls/:id", (req, res) => {
+router.get('/polls/:id', (req, res) => {
 	const id = req.params.id;
-	pollController
-		.read(id)
-		.then((user) => {
-			console.log(user);
-			res.send(user);
+	Poll.findByPk(id)
+		.then((poll) => {
+			res.status(status.OK).send(poll);
 		})
-		.catch(() => {
-			res.status(status.INTERNAL_SERVER_ERROR).json({
-				message: "internal server error"
-			});
+		.catch((error) => {
+			res.status(status.INTERNAL_SERVER_ERROR).send(error);
 		});
 });
 
-router.post("/polls", (req, res) => {
+router.get('/polls/:id/all', (req, res) => {
+	const id = req.params.id;
+	Poll.findAll({ where: { userId: id } })
+		.then((polls) => {
+			res.status(status.OK).send(polls);
+		})
+		.catch((error) => {
+			res.status(status.INTERNAL_SERVER_ERROR).send(error);
+		});
+});
+
+router.post('/polls', (req, res) => {
 	const pollData = req.body;
-	pollData.id = uuidv4();
-	let code: string = pollData.name.match(/\b(\w)/g).toUpperCase();
-	if (code.length > 3) {
-		code = (code + Math.random()).substring(2, 2 + 4 - code.length);
-		pollData.code = code;
-	} else {
-		code = code.substring(0, 4);
-		pollData.code = code;
-	}
+	// let code: string = pollData.name.match(/\b(\w)/g).join('').toUpperCase();
+	// if (code.length < 4) {
+	// 	code = code + ('' + Math.random()).substring(2, 2 + 4 - code.length);
+	// 	pollData.code = code;
+	// } else {
+	// 	code = code.substring(0, 4);
+	// 	pollData.code = code;
+	// }
 	try {
-		const { data, valid, error } = pollModel.pollValidator(pollData);
-		if (valid) {
-			// const expiry = Math.abs(new Date() - compareDate);
-			client.setex(data, 3600, JSON.stringify(data));
-			pollController.create(data).then(() => {}).catch(() => {
-				res.status(status.INTERNAL_SERVER_ERROR).json({
-					message: "internal server error"
-				});
+		const { data, valid, error } = pollSchema.createPollValidator(pollData);
+		if (!valid) throw error;
+		// const pollKey = 'poll:' + data.code;
+		// const expiry = Math.abs(new Date().getTime() - new Date(data.expiryDate).getTime()) / 1000;
+		Poll.create(data)
+			.then((user) => {
+				res.status(status.CREATED).send(user);
+			})
+			.catch((err) => {
+				res.status(status.INTERNAL_SERVER_ERROR).send(err);
 			});
-		} else {
-			throw error;
-		}
 	} catch (error) {
 		res.status(status.BAD_REQUEST).send(error);
 	}
 });
 
-router.post("/test", (req, res) => {
+router.put('/polls/:id', (req, res) => {
+	const id = req.params.id;
+	const pollData = req.body;
+	try {
+		const { data, valid, error } = pollSchema.updatePollValidator(pollData);
+		if (!valid) throw error;
+		Poll.findByPk(id)
+			.then((user) => {
+				user
+					.update(data)
+					.then((newUser) => {
+						res.status(status.OK).send(newUser);
+					})
+					.catch((err) => {
+						res.status(status.INTERNAL_SERVER_ERROR).send(err);
+					});
+			})
+			.catch((err) => {
+				res.status(status.INTERNAL_SERVER_ERROR).send(err);
+			});
+	} catch (error) {
+		res.status(status.BAD_REQUEST).send(error);
+	}
+});
+
+router.delete('/polls/:id', (req, res) => {
+	const id = req.params.id;
+	Poll.findByPk(id)
+		.then((user) => {
+			user
+				.destroy()
+				.then(() => {
+					res.status(202).send();
+				})
+				.catch((error) => {
+					res.status(status.INTERNAL_SERVER_ERROR).send();
+				});
+		})
+		.catch((error) => {
+			res.status(status.INTERNAL_SERVER_ERROR).send(error);
+		});
+});
+
+router.post('/polls/ussd', (req, res) => {
 	const userData = req.body;
-
-	const data = {
-		code: 1,
-		id: "sdfnkjdb",
-		name: "Miss Ghana",
-		about: "miss Ghana beauty pagent",
-		categories: [
-			{
-				title: "cat1",
-				participants: [
-					{ name: "Azumah" },
-					{ name: "Ebenezer" },
-					{ name: "Adelwin" }
-				]
-			},
-			{
-				title: "cat2",
-				participants: [
-					{ name: "Azumah" },
-					{ name: "Ebenezer" },
-					{ name: "Adelwin" }
-				]
-			}
-		]
-	};
-
 	const response = {
-		USERID: "nalotest",
+		USERID: 'nalotest',
 		MSISDN: userData.MSISDN,
-		MSG: "",
+		MSG: '',
 		MSGTYPE: false
 	};
-	const pollKey = "poll:" + data.code;
-	const sessionKey = "ussd:" + userData.MSISDN;
-	let session = "0";
+	let pollKey = '';
+	const sessionKey = 'ussd:' + userData.MSISDN;
+	let session = '0';
 	try {
 		if (!(userData.USERID && userData.USERDATA && userData.MSISDN)) {
-			console.log(userData);
-			throw new Error("missing params");
+			throw { status: status.BAD_REQUEST, error: new Error('missing params') };
 		}
 		if (userData.MSGTYPE) {
 			client.setex(sessionKey, 120, session);
-			response.MSG = "Please enter program code";
+			response.MSG = 'Please enter program code';
 			res.status(status.OK).send(response);
 		} else {
-			client.get(sessionKey, (err, sessionStore) => {
-				if (sessionKey) {
+			client.get(sessionKey, (error, sessionStore) => {
+				if (error) {
+					throw { status: status.INTERNAL_SERVER_ERROR, error };
+				}
+				if (sessionStore) {
+					sessionStore.length === 1
+						? (pollKey = 'poll:' + userData.USERDATA)
+						: 'poll:' + sessionStore.slice(1, 5);
 					session = sessionStore + userData.USERDATA;
 					client.setex(sessionKey, 120, session);
 					client.get(pollKey, (err, pollstore) => {
+						if (err) {
+							throw {
+								status: status.INTERNAL_SERVER_ERROR,
+								err
+							};
+						}
 						if (pollstore) {
-							const sessionArray = session.split("").map(Number);
 							const poll = JSON.parse(pollstore);
-							if (sessionArray.length === 2) {
-								response.MSG = "Please select category to vote";
-								poll.categories.map((item: { name: string }, index: number) => {
-									response.MSG = response.MSG + "\n" + index + ")" + item.name;
-								});
-								res.status(status.OK).send(response);
-							} else if (sessionArray.length === 3) {
-								response.MSG =
-									"Please select your participant for" +
-									poll.categories[sessionArray[2]].title;
-								poll.categories[
-									sessionArray[2]
-								].participants.map((item: { name: string }, index: number) => {
-									response.MSG = response.MSG + "\n" + index + ")" + item.name;
-								});
-								res.status(status.OK).send(response);
-							}
+							response.MSG = menu(session, poll);
+							res.status(status.OK).send(response);
 						} else {
-							client.setex(pollKey, 3600, JSON.stringify(data));
-							res.send();
+							pollController
+								.queryByCode(pollKey.slice(5))
+								.then((poll: any) => {
+									const expiry =
+										Math.abs(
+											new Date().getTime() -
+												new Date(poll.expiryDate).getTime()
+										) / 1000;
+									client.setex(pollKey, expiry, JSON.stringify(poll));
+									response.MSG = menu(session, poll);
+									res.status(status.OK).send(response);
+								})
+								.catch((errors) => {
+									if (errors === true) {
+										response.MSG =
+											'program code ' + pollKey.slice(5) + 'does not exist';
+										response.MSGTYPE = true;
+										res.status(status.OK).send(response);
+									} else {
+										response.MSG = 'APPLICATION DOWN';
+										response.MSGTYPE = true;
+										res.status(status.BAD_REQUEST).send(response);
+									}
+								});
 						}
 					});
+				} else {
+					client.setex(sessionKey, 120, session);
+					response.MSG = 'Please enter program code';
+					res.status(status.OK).send(response);
 				}
 			});
 		}
 	} catch (error) {
-		res.status(status.BAD_REQUEST).send(error);
+		res.status(error.status).send(error.error);
 	}
 });
 

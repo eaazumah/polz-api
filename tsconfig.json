@@ -1,10 +1,14 @@
 {
     "compilerOptions": {
+        "types": [],
         "resolveJsonModule": true,
         "esModuleInterop": true,
+        "target": "ES2017",
         "module": "commonjs",
+        "typeRoots": [ "node_modules/@types/" ],
+        "emitDecoratorMetadata": true,
+        "experimentalDecorators": true,
         "allowSyntheticDefaultImports": true,
-        "target": "es6",
         "noImplicitAny": true,
         "moduleResolution": "node",
         "sourceMap": true,
