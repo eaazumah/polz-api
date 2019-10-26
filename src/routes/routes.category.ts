@@ -2,6 +2,7 @@ import express from 'express';
 import bcrypt from 'bcrypt';
 import status from 'http-status';
 import { Category } from '../models/category.model';
+import { Poll } from '../models/poll.model';
 import { createCategoryValidator, updateCategoryValidator } from '../schema/category.schema';
 
 const router = express.Router();
@@ -17,8 +18,8 @@ router.get('/categories', (req, res) => {
 });
 
 router.get('/categories/:id/all', (req, res) => {
-	const userId = req.params.id;
-	Category.findAll({ where: { userId } })
+	const pollId = req.params.id;
+	Category.findAll({ where: { pollId } })
 		.then((categories) => {
 			res.status(status.OK).send(categories);
 		})
@@ -31,7 +32,11 @@ router.get('/categories/:id', (req, res) => {
 	const id = req.params.id;
 	Category.findByPk(id)
 		.then((categories) => {
-			res.status(status.OK).send(categories);
+			if (categories) {
+				res.status(status.OK).send(categories);
+			} else {
+				res.status(status.BAD_REQUEST).send({ error: 'category does not exist' });
+			}
 		})
 		.catch(() => {
 			res.status(status.INTERNAL_SERVER_ERROR).send();
@@ -45,13 +50,23 @@ router.post('/categories', (req, res) => {
 		if (!valid) {
 			throw error;
 		}
-		Category.create(data)
-			.then((categories) => {
-				res.status(status.CREATED).send(categories);
+		Poll.findByPk(data.pollId)
+			.then((poll) => {
+				if (poll) {
+					Category.create(data)
+						.then((categories) => {
+							res.status(status.CREATED).send(categories);
+						})
+						.catch((err) => {
+							// tslint:disable-next-line: no-console
+							console.log(err);
+							res.status(status.INTERNAL_SERVER_ERROR).send(err);
+						});
+				} else {
+					res.status(status.BAD_REQUEST).send({ error: 'poll does not exist' });
+				}
 			})
 			.catch((err) => {
-				// tslint:disable-next-line: no-console
-				console.log(err);
 				res.status(status.INTERNAL_SERVER_ERROR).send(err);
 			});
 	} catch (error) {
@@ -69,14 +84,30 @@ router.put('/categories/:id', (req, res) => {
 		}
 		Category.findByPk(id)
 			.then((category) => {
-				category
-					.update(data)
-					.then((newCategory) => {
-						res.status(status.OK).send(newCategory);
-					})
-					.catch((err) => {
-						res.status(status.INTERNAL_SERVER_ERROR).send(err);
-					});
+				if (category) {
+					Poll.findByPk(data.pollId)
+						.then((poll) => {
+							if (poll) {
+								category
+									.update(data)
+									.then((newCategory) => {
+										res.status(status.OK).send(newCategory);
+									})
+									.catch((err) => {
+										res.status(status.INTERNAL_SERVER_ERROR).send(err);
+									});
+							} else {
+								res
+									.status(status.BAD_REQUEST)
+									.send({ error: 'poll does not exist' });
+							}
+						})
+						.catch((err) => {
+							res.status(status.INTERNAL_SERVER_ERROR).json(err);
+						});
+				} else {
+					res.status(status.BAD_REQUEST).send({ error: 'category does not exist' });
+				}
 			})
 			.catch((errr) => {
 				res.status(status.INTERNAL_SERVER_ERROR).json(errr);

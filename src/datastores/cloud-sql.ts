@@ -35,6 +35,19 @@ const resetDb = async (): Promise<boolean> => {
 	return true;
 };
 
+// tslint:disable-next-line: space-before-function-paren
+const syncDb = async (): Promise<boolean> => {
+	try {
+		await sequelize.sync({ force: false });
+		logger.debug('DB: Database initialized');
+	} catch (ex) {
+		logger.error('DB: ERROR initializing database');
+		logger.error(ex);
+		return false;
+	}
+	return true;
+};
+
 export { sequelize, Sequelize };
 export { User, Poll, Category, Participant, Vote };
-export { resetDb };
+export { resetDb, syncDb };

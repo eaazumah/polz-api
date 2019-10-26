@@ -28,10 +28,7 @@ const updateUserSchema = {
 		email: { format: 'email' },
 		password: { type: 'string' }
 	},
-	additionalProperties: false,
-	required: [
-		'id'
-	]
+	additionalProperties: false
 };
 
 const createUserValidate = ajv.compile(createUserSchema);

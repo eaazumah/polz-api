@@ -6,7 +6,7 @@ const createParticipantSchema = {
 	properties: {
 		name: { type: 'string' },
 		image: { type: 'string' },
-		categoryId: { type: 'string' }
+		categoryId: { type: 'number' }
 	},
 	required: [
 		'name',
@@ -20,11 +20,9 @@ const updateParticipantSchema = {
 	properties: {
 		name: { type: 'string' },
 		image: { type: 'string' },
-		categoryId: { type: 'string' }
+		categoryId: { type: 'number' }
 	},
-	required: [
-		'id'
-	],
+
 	additionalProperties: false
 };
 

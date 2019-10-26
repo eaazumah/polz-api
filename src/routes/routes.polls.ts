@@ -6,6 +6,7 @@ import * as pollSchema from '../schema/poll.schema';
 import redis from 'redis';
 import menu from '../util/menu';
 import { Poll } from '../models/poll.model';
+import { User } from '../models/user.model';
 
 const client = redis.createClient();
 const router = express.Router();
@@ -24,9 +25,14 @@ router.get('/polls/:id', (req, res) => {
 	const id = req.params.id;
 	Poll.findByPk(id)
 		.then((poll) => {
-			res.status(status.OK).send(poll);
+			if (poll) {
+				res.status(status.OK).send(poll);
+			} else {
+				res.status(status.BAD_REQUEST).send({ error: 'poll does not exist' });
+			}
 		})
 		.catch((error) => {
+			// tslint:disable-next-line: no-console
 			res.status(status.INTERNAL_SERVER_ERROR).send(error);
 		});
 });
@@ -57,12 +63,22 @@ router.post('/polls', (req, res) => {
 		if (!valid) throw error;
 		// const pollKey = 'poll:' + data.code;
 		// const expiry = Math.abs(new Date().getTime() - new Date(data.expiryDate).getTime()) / 1000;
-		Poll.create(data)
-			.then((user) => {
-				res.status(status.CREATED).send(user);
+		User.findByPk(data.userId)
+			.then((pollUser) => {
+				if (!pollUser) {
+					res.status(status.BAD_REQUEST).send({ error: 'user does not exist' });
+				} else {
+					Poll.create(data)
+						.then((user) => {
+							res.status(status.CREATED).send(user);
+						})
+						.catch((err) => {
+							res.status(status.INTERNAL_SERVER_ERROR).send(err);
+						});
+				}
 			})
 			.catch((err) => {
-				res.status(status.INTERNAL_SERVER_ERROR).send(err);
+				res.status(status.INTERNAL_SERVER_ERROR).send({ error: err });
 			});
 	} catch (error) {
 		res.status(status.BAD_REQUEST).send(error);

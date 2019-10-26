@@ -3,7 +3,6 @@ import {
 	Column,
 	Model,
 	HasMany,
-	IsEmail,
 	DeletedAt,
 	BelongsTo,
 	ForeignKey,
@@ -18,9 +17,10 @@ import { Participant } from './participants.model';
 	paranoid: true
 })
 export class Category extends Model<Category> {
-	@Column name: string;
-
-	@Column expiryDate: Date;
+	@Column({
+		allowNull: false
+	})
+	name: string;
 
 	@CreatedAt createOn: Date;
 

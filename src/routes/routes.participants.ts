@@ -6,6 +6,7 @@ import {
 	updateParticipantValidator
 } from '../schema/participant.schema';
 import { Participant } from '../models/participants.model';
+import { Category } from '../models/category.model';
 
 const router = express.Router();
 
@@ -14,8 +15,10 @@ router.get('/participants', (_req, res) => {
 		.then((participants) => {
 			res.status(status.OK).send(participants);
 		})
-		.catch(() => {
-			res.status(status.INTERNAL_SERVER_ERROR).send();
+		.catch((err) => {
+			// tslint:disable-next-line: no-console
+			console.log(err);
+			res.status(status.INTERNAL_SERVER_ERROR).send(err.errors);
 		});
 });
 
@@ -23,10 +26,14 @@ router.get('/participants/:id', (req, res) => {
 	const id = req.params.id;
 	Participant.findByPk(id)
 		.then((participants) => {
-			res.status(status.OK).send(participants);
+			if (participants) {
+				res.status(status.OK).send(participants);
+			} else {
+				res.status(status.BAD_REQUEST).send({ error: 'participant does not exist' });
+			}
 		})
-		.catch(() => {
-			res.status(status.INTERNAL_SERVER_ERROR).send();
+		.catch((err) => {
+			res.status(status.INTERNAL_SERVER_ERROR).send(err.errors);
 		});
 });
 
@@ -37,14 +44,24 @@ router.post('/participants', (req, res) => {
 		if (!valid) {
 			throw error;
 		}
-		Participant.create(data)
-			.then((participants) => {
-				res.status(status.CREATED).send(participants);
+		Category.findByPk(data.categoryId)
+			.then((category) => {
+				if (category) {
+					Participant.create(data)
+						.then((participants) => {
+							res.status(status.CREATED).send(participants);
+						})
+						.catch((err) => {
+							// tslint:disable-next-line: no-console
+							console.log(err);
+							res.status(status.INTERNAL_SERVER_ERROR).send(err.errors);
+						});
+				} else {
+					res.status(status.BAD_REQUEST).send({ error: 'category does not exist' });
+				}
 			})
 			.catch((err) => {
-				// tslint:disable-next-line: no-console
-				console.log(err);
-				res.status(status.INTERNAL_SERVER_ERROR).send(err);
+				res.status(status.INTERNAL_SERVER_ERROR).send(err.errors);
 			});
 	} catch (error) {
 		res.status(status.BAD_REQUEST).send(error);
@@ -61,20 +78,24 @@ router.put('/participants/:id', (req, res) => {
 		}
 		Participant.findByPk(id)
 			.then((participant) => {
-				participant
-					.update(data)
-					.then((newParticipant) => {
-						res.status(status.OK).send(newParticipant);
-					})
-					.catch((err) => {
-						res.status(status.INTERNAL_SERVER_ERROR).send(err);
-					});
+				if (participant) {
+					participant
+						.update(data)
+						.then((newParticipant) => {
+							res.status(status.OK).send(newParticipant);
+						})
+						.catch((err) => {
+							res.status(status.INTERNAL_SERVER_ERROR).send(err.errors);
+						});
+				} else {
+					res.status(status.BAD_REQUEST).send({ error: 'participant does not exist' });
+				}
 			})
 			.catch((errr) => {
-				res.status(status.INTERNAL_SERVER_ERROR).json(errr);
+				res.status(status.INTERNAL_SERVER_ERROR).send(errr.errors);
 			});
 	} catch (error) {
-		res.status(status.BAD_REQUEST).send(error);
+		res.status(status.BAD_REQUEST).send(error.errors);
 	}
 });
 
@@ -88,11 +109,11 @@ router.delete('/participants/:id', (req, res) => {
 					res.status(204).send();
 				})
 				.catch((error) => {
-					res.status(status.INTERNAL_SERVER_ERROR).send(error);
+					res.status(status.INTERNAL_SERVER_ERROR).send(error.errors);
 				});
 		})
 		.catch((error) => {
-			res.status(status.INTERNAL_SERVER_ERROR).send(error);
+			res.status(status.INTERNAL_SERVER_ERROR).send(error.errors);
 		});
 });
 

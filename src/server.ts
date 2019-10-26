@@ -2,7 +2,7 @@ import errorHandler from 'errorhandler';
 
 import app from './app';
 import { createServer } from 'http';
-import { resetDb } from './datastores/cloud-sql';
+import { syncDb } from './datastores/cloud-sql';
 
 /**
  * Error Handler. Provides full stack - remove for production
@@ -36,7 +36,7 @@ app.use(errorHandler());
 
 const port = app.get('port');
 const server = (async() => {
-	await resetDb();
+	await syncDb();
 	// tslint:disable-next-line: no-console
 	createServer(app).listen(port, () => console.log(`Server listen on port ${port}`));
 })();

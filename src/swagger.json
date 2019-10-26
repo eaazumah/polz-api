@@ -529,7 +529,7 @@
 					"200": {
 						"description": "participants found",
 						"schema": {
-							"$ref": "#/definitions/participants"
+							"$ref": "#/definitions/Participant"
 						}
 					}
 				}
@@ -592,8 +592,8 @@
 		"Category": {
 			"type": "object",
 			"properties": {
-				"title": { "type": "string" },
-				"pollId": { "type": "string" }
+				"name": { "type": "string" },
+				"pollId": { "type": "number" }
 			},
 			"required": [
 				"id",
@@ -605,10 +605,17 @@
 			"type": "array",
 			"$ref": "#/definitions/Category"
 		},
+		"Participant": {
+			"type": "object",
+			"properties": {
+				"name": { "type": "string" },
+				"image": { "type": "string" },
+				"categoryId": { "type": "number" }
+			}
+		},
 		"Participants": {
-			"name": { "type": "string" },
-			"image": { "type": "string" },
-			"categoryId": { "type": "number" }
+			"type": "array",
+			"$ref": "#/definitions/Participant"
 		}
 	}
 }

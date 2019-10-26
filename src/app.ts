@@ -29,7 +29,7 @@ app.use((req, res, next) => {
 	next();
 });
 
-app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
+app.use('/api/v1/docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 
 /**
  * Primary app routes.

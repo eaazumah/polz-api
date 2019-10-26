@@ -4,13 +4,11 @@ const ajv = new Ajv({ allErrors: true });
 const createCategorySchema = {
 	type: 'object',
 	properties: {
-		id: { type: 'string' },
-		title: { type: 'string' },
-		pollId: { type: 'string' }
+		name: { type: 'string' },
+		pollId: { type: 'number' }
 	},
 	required: [
-		'id',
-		'title',
+		'name',
 		'pollId'
 	],
 	additionalProperties: false
@@ -19,13 +17,9 @@ const createCategorySchema = {
 const updateCategorySchema = {
 	type: 'object',
 	properties: {
-		id: { type: 'string' },
 		name: { type: 'string' },
-		pollId: { type: 'string' }
+		pollId: { type: 'number' }
 	},
-	required: [
-		'id'
-	],
 	additionalProperties: false
 };
 

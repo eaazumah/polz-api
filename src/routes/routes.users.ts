@@ -12,8 +12,8 @@ router.get('/users', (_req, res) => {
 		.then((users) => {
 			res.status(status.OK).send(users);
 		})
-		.catch(() => {
-			res.status(status.INTERNAL_SERVER_ERROR).send();
+		.catch((err) => {
+			res.status(status.INTERNAL_SERVER_ERROR).send(err.errors);
 		});
 });
 
@@ -21,10 +21,14 @@ router.get('/users/:id', (req, res) => {
 	const id = req.params.id;
 	User.findByPk(id)
 		.then((user) => {
-			res.status(status.OK).send(user);
+			if (user) {
+				res.status(status.OK).send(user);
+			} else {
+				res.status(status.BAD_REQUEST).send({ error: 'user does not exist' });
+			}
 		})
-		.catch(() => {
-			res.status(status.INTERNAL_SERVER_ERROR).send();
+		.catch((err) => {
+			res.status(status.INTERNAL_SERVER_ERROR).send(err.errors);
 		});
 });
 
@@ -45,7 +49,7 @@ router.post('/users', (req, res) => {
 					.catch((err) => {
 						// tslint:disable-next-line: no-console
 						console.log(err);
-						res.status(status.INTERNAL_SERVER_ERROR).send(err);
+						res.status(status.INTERNAL_SERVER_ERROR).send(err.errors);
 					});
 			} else {
 				// tslint:disable-next-line: no-console
@@ -59,7 +63,7 @@ router.post('/users', (req, res) => {
 	}
 });
 
-router.put('/users:id', (req, res) => {
+router.put('/users/:id', (req, res) => {
 	const id = req.params.id;
 	const reqData = req.body;
 	try {
@@ -69,17 +73,21 @@ router.put('/users:id', (req, res) => {
 		}
 		User.findByPk(id)
 			.then((user) => {
-				user
-					.update(data)
-					.then((newUser) => {
-						res.status(status.OK).send(newUser);
-					})
-					.catch((err) => {
-						res.status(status.INTERNAL_SERVER_ERROR).json(err);
-					});
+				if (user) {
+					user
+						.update(data)
+						.then((newUser) => {
+							res.status(status.OK).send(newUser);
+						})
+						.catch((err) => {
+							res.status(status.INTERNAL_SERVER_ERROR).send(err.errors);
+						});
+				} else {
+					res.status(status.BAD_REQUEST).send({ error: 'user does not exist' });
+				}
 			})
 			.catch((errr) => {
-				res.status(status.INTERNAL_SERVER_ERROR).json(errr);
+				res.status(status.INTERNAL_SERVER_ERROR).json(errr.errors);
 			});
 	} catch (error) {
 		res.status(status.BAD_REQUEST).send(error);
