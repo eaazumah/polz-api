@@ -10,7 +10,8 @@ const createPollSchema = {
 		userId: { type: 'number' },
 		expired: { type: 'boolean' },
 		freePoll: { type: 'boolean' },
-		expiryDate: { format: 'date-time' }
+		expiryDate: { format: 'date-time' },
+		image: { type: 'string' }
 	},
 	required: [
 		'name',
@@ -28,7 +29,8 @@ const updatePollSchema = {
 		unitCost: { type: 'number' },
 		expired: { type: 'boolean' },
 		freePoll: { type: 'boolean' },
-		expiryDate: { format: 'date-time' }
+		expiryDate: { format: 'date-time' },
+		image: { type: 'string' }
 	},
 	required: [
 		'id'

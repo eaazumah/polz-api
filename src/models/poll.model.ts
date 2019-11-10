@@ -28,14 +28,6 @@ export class Poll extends Model<Poll> {
 	code: string;
 
 	@Column({
-		type: DataType.TEXT,
-		allowNull: true,
-		defaultValue: null,
-		comment: 'Json stringfied menu object of poll'
-	})
-	menu: string;
-
-	@Column({
 		allowNull: false,
 		comment: 'Name of poll'
 	})
@@ -47,6 +39,13 @@ export class Poll extends Model<Poll> {
 		comment: 'Poll description'
 	})
 	about: string;
+
+	@Column({
+		allowNull: true,
+		defaultValue: null,
+		comment: 'image url'
+	})
+	image: string;
 
 	@Column({
 		allowNull: false,

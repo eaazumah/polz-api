@@ -4,9 +4,15 @@ import bodyParser from 'body-parser';
 import userRouter from './routes/routes.users';
 import pollRouter from './routes/routes.polls';
 import categoryRouter from './routes/routes.category';
+import ussdRouter from './routes/routes.ussd';
+import authRouter from './routes/routes.auth';
 import participantRouter from './routes/routes.participants';
 const swaggerUi = require('swagger-ui-express');
 import swaggerDocument from './swagger.json';
+
+const passport = require('passport');
+
+require('./config/passport');
 
 // API keys and Passport configuration
 // import * as passportConfig from "./config/passport";
@@ -18,6 +24,7 @@ const app = express();
 // Express configuration
 app.set('port', process.env.PORT || 3000);
 app.use(compression());
+app.use(bodyParser({ limit: '10MB' }));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
@@ -38,11 +45,12 @@ app.use('/api/v1/docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 /**
  * API examples routes.
  */
-
+app.use('/api/v1', authRouter);
 app.use('/api/v1', userRouter);
 app.use('/api/v1', pollRouter);
-app.use('/api/v1', categoryRouter);
-app.use('/api/v1', participantRouter);
+app.use('/api/v1', passport.authenticate('jwt', { session: false }), categoryRouter);
+app.use('/api/v1', passport.authenticate('jwt', { session: false }), participantRouter);
+app.use('/api/v1', ussdRouter);
 
 /**
  * OAuth authentication routes. (Sign in)

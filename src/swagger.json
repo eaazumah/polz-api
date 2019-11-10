@@ -23,6 +23,15 @@
 		{
 			"name": "Categories",
 			"description": "API for polls categoreis in the system"
+		},
+		{
+			"name": "Ussd",
+			"description": "API for ussd operation in the system"
+		},
+
+		{
+			"name": "Auth",
+			"description": "API for authentication in the system"
 		}
 	],
 	"schemes": [
@@ -137,6 +146,35 @@
 						"description": "User is updated",
 						"schema": {
 							"$ref": "#/definitions/User"
+						}
+					}
+				}
+			}
+		},
+		"/login": {
+			"post": {
+				"tags": [
+					"Auth"
+				],
+				"description": "user login in system",
+				"parameters": [
+					{
+						"name": "credentials",
+						"in": "body",
+						"description": "user credentials for login",
+						"schema": {
+							"$ref": "#/definitions/Poll"
+						}
+					}
+				],
+				"produces": [
+					"application/json"
+				],
+				"responses": {
+					"200": {
+						"description": "New poll is created",
+						"schema": {
+							"$ref": "#/definitions/Poll"
 						}
 					}
 				}
@@ -273,6 +311,55 @@
 				}
 			}
 		},
+
+		"/polls/{pollId}/activate": {
+			"parameters": [
+				{
+					"name": "pollId",
+					"in": "path",
+					"required": true,
+					"description": "ID of poll that we want to to go live",
+					"type": "number"
+				}
+			],
+			"post": {
+				"tags": [
+					"Polls"
+				],
+				"summary": "activate or go live with poll",
+				"responses": {
+					"200": {
+						"description": "polls is live or active",
+						"schema": {}
+					}
+				}
+			}
+		},
+
+		"/polls/{pollId}/deactivate": {
+			"parameters": [
+				{
+					"name": "pollId",
+					"in": "path",
+					"required": true,
+					"description": "ID of poll that we want to deactivate from live",
+					"type": "number"
+				}
+			],
+			"post": {
+				"tags": [
+					"Polls"
+				],
+				"summary": "deactivate poll from beening live",
+				"responses": {
+					"200": {
+						"description": "polls is not live or deactivate",
+						"schema": {}
+					}
+				}
+			}
+		},
+
 		"/categories": {
 			"post": {
 				"tags": [
@@ -534,10 +621,40 @@
 					}
 				}
 			}
+		},
+		"/ussd": {
+			"post": {
+				"tags": [
+					"Ussd"
+				],
+				"description": "Perform ussd operation",
+				"parameters": [
+					{
+						"name": "ussdData",
+						"in": "body",
+						"description": "ussdData that we want to create",
+						"schema": {
+							"$ref": "#/definitions/Ussd"
+						}
+					}
+				],
+				"produces": [
+					"application/json"
+				],
+				"responses": {
+					"200": {
+						"description": "ussd response data",
+						"schema": {
+							"$ref": "#/definitions/UssdResp"
+						}
+					}
+				}
+			}
 		}
 	},
+
 	"securityDefinitions": {
-		"jwt": {
+		"Bearer": {
 			"type": "apiKey",
 			"in": "header",
 			"name": "Authorization"
@@ -616,6 +733,25 @@
 		"Participants": {
 			"type": "array",
 			"$ref": "#/definitions/Participant"
+		},
+
+		"Ussd": {
+			"type": "object",
+			"properties": {
+				"USERID": { "type": "string" },
+				"MSISDN": { "type": "string" },
+				"USERDATA": { "type": "string" },
+				"MSGTYPE": { "type": "boolean" }
+			}
+		},
+		"UssdResp": {
+			"type": "object",
+			"properties": {
+				"USERID": { "type": "string" },
+				"MSISDN": { "type": "string" },
+				"MSG": { "type": "string" },
+				"MSGTYPE": { "type": "boolean" }
+			}
 		}
 	}
 }

@@ -8,7 +8,8 @@ const createUserSchema = {
 		firstName: { type: 'string' },
 		lastName: { type: 'string' },
 		email: { format: 'email' },
-		password: { type: 'string' }
+		password: { type: 'string' },
+		image: { type: 'string' }
 	},
 	additionalProperties: false,
 	required: [
@@ -26,7 +27,8 @@ const updateUserSchema = {
 		firstName: { type: 'string' },
 		lastName: { type: 'string' },
 		email: { format: 'email' },
-		password: { type: 'string' }
+		password: { type: 'string' },
+		image: { type: 'string' }
 	},
 	additionalProperties: false
 };

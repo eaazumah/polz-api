@@ -7,10 +7,23 @@ import {
 	CreatedAt,
 	UpdatedAt,
 	IsEmail,
-	Unique
+	Unique,
+	DefaultScope,
+	Scopes
 } from 'sequelize-typescript';
 import { Poll } from './poll.model';
 
+// defaultScope: {
+// 	attributes: { exclude: ['password']; },
+//   }
+// @Scopes(() => ({
+// 	full: {
+// 	  include: [Manufacturer]
+// 	},
+// 	yellow: {
+// 	  where: {primaryColor: 'yellow'}
+// 	}
+//   }))
 @Table({
 	timestamps: true,
 	paranoid: true
@@ -41,6 +54,13 @@ export class User extends Model<User> {
 	email: string;
 
 	@Column({
+		allowNull: true,
+		defaultValue: null,
+		comment: 'image url'
+	})
+	image: string;
+
+	@Column({
 		allowNull: false,
 		defaultValue: 0.0
 	})
@@ -50,6 +70,13 @@ export class User extends Model<User> {
 		allowNull: false
 	})
 	password: string;
+
+	@Column({
+		allowNull: false,
+		defaultValue: false,
+		comment: 'adimn user flag'
+	})
+	isAdmin: boolean;
 
 	@CreatedAt createOn: Date;
 

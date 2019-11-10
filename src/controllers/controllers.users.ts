@@ -1,4 +1,4 @@
-import firestore from '../datastores/firestore-datastore';
+import { firestore } from '../datastores/firestore.datastore';
 import docPath from '../constants/firestoreDocPath';
 
 /**

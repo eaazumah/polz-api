@@ -1,13 +1,13 @@
 import express from 'express';
-import bcrypt from 'bcrypt';
 import status from 'http-status';
 import { Category } from '../models/category.model';
 import { Poll } from '../models/poll.model';
 import { createCategoryValidator, updateCategoryValidator } from '../schema/category.schema';
+import passport from 'passport';
 
 const router = express.Router();
 
-router.get('/categories', (req, res) => {
+router.get('/categories', passport.authenticate('jwt-admin', { session: false }), (req, res) => {
 	Category.findAll()
 		.then((categories) => {
 			res.status(status.OK).send(categories);

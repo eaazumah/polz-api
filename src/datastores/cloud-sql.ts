@@ -6,13 +6,14 @@
 
 import { Sequelize } from 'sequelize-typescript';
 import { User, Category, Poll, Participant, Vote } from '../models';
+import CONFIG from '../config/config';
 import logger from '../util/logger';
 
 const sequelize = new Sequelize({
-	database: 'polzDB',
-	dialect: 'mysql',
-	username: 'root',
-	password: 'Az123456789',
+	database: CONFIG.db_name,
+	dialect: CONFIG.db_dialect as 'mysql' | 'postgres',
+	username: CONFIG.db_user,
+	password: CONFIG.db_password,
 	models: [
 		User,
 		Poll,
