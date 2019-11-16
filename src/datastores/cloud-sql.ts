@@ -9,9 +9,6 @@ import { User, Category, Poll, Participant, Vote } from '../models';
 import CONFIG from '../config/config';
 import logger from '../util/logger';
 
-// tslint:disable-next-line: no-console
-console.log(CONFIG);
-
 const sequelize = new Sequelize({
 	database: CONFIG.db_name,
 	dialect: CONFIG.db_dialect as 'mysql' | 'postgres',

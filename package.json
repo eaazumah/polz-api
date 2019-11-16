@@ -4,7 +4,7 @@
 	"description": "polling system",
 	"repository": {
 		"type": "git",
-		"url": "https://github.com/Microsoft/TypeScript-Node-Starter"
+		"url": ""
 	},
 	"author": "Azumah Ebenezzer",
 	"license": "MIT",
@@ -23,6 +23,9 @@
 		"serve-debug": "nodemon --inspect dist/server.js",
 		"watch-debug": "concurrently -k -p \"[{name}]\" -n \"TypeScript,Node\" -c \"yellow.bold,cyan.bold,green.bold\"  \"npm run watch-ts\" \"npm run serve-debug\"",
 		"postinstall": "npm run build"
+	},
+	"engines": {
+		"node": ">=8.0.0"
 	},
 	"dependencies": {
 		"@google-cloud/firestore": "^2.3.0",
