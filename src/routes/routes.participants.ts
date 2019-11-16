@@ -65,7 +65,7 @@ router.post('/participants', (req, res) => {
 						delete data.image;
 					}
 					Participant.create(data)
-						.then(async (participants) => {
+						.then(async(participants) => {
 							if (image) {
 								const filename = `participants/${participants.id}`;
 								image = upload(image, filename);

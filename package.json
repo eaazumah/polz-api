@@ -9,6 +9,9 @@
 	"author": "Azumah Ebenezzer",
 	"license": "MIT",
 	"scripts": {
+		"prepare": "npm run gcp-build",
+		"pretest": "npm run gcp-build",
+		"posttest": "npm run lint",
 		"start": "npm run serve",
 		"build": "npm run build-ts && npm run lint",
 		"serve": "node dist/server.js",
@@ -22,7 +25,9 @@
 		"debug": "npm run build && npm run watch-debug",
 		"serve-debug": "nodemon --inspect dist/server.js",
 		"watch-debug": "concurrently -k -p \"[{name}]\" -n \"TypeScript,Node\" -c \"yellow.bold,cyan.bold,green.bold\"  \"npm run watch-ts\" \"npm run serve-debug\"",
-		"postinstall": "npm run build"
+		"postinstall": "npm run build",
+		"gcp-build": "npm run build",
+		"deploy": "gcloud app deploy"
 	},
 	"engines": {
 		"node": ">=8.0.0"
@@ -69,6 +74,7 @@
 		"winston": "^3.2.1"
 	},
 	"devDependencies": {
+		"@google-cloud/nodejs-repo-tools": "^3.3.0",
 		"@types/async": "^3.0.2",
 		"@types/bcrypt": "^3.0.0",
 		"@types/bcrypt-nodejs": "^0.0.30",
