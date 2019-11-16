@@ -1,3 +1,4 @@
+// tslint:disable-next-line: no-implicit-dependencies
 require('dotenv').config(); // instatiate environment variables
 
 const CONFIG: any = {
