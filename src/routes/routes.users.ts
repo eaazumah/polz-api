@@ -54,7 +54,7 @@ router.post('/users', (req, res) => {
 					delete data.image;
 				}
 				User.create(data)
-					.then(async (user) => {
+					.then(async(user) => {
 						if (image) {
 							const filename = `profile/${user.id}`;
 							image = upload(image, filename);
@@ -97,7 +97,7 @@ router.post('/users/admin', (req, res) => {
 					delete data.image;
 				}
 				User.create(data)
-					.then(async (user) => {
+					.then(async(user) => {
 						if (image) {
 							const filename = `profile/${user.id}`;
 							image = upload(image, filename);

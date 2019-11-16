@@ -32,6 +32,10 @@
 		{
 			"name": "Auth",
 			"description": "API for authentication in the system"
+		},
+		{
+			"name": "Vote",
+			"description": "API for submiting vote"
 		}
 	],
 	"schemes": [
@@ -163,7 +167,7 @@
 						"in": "body",
 						"description": "user credentials for login",
 						"schema": {
-							"$ref": "#/definitions/Poll"
+							"$ref": "#/definitions/Login"
 						}
 					}
 				],
@@ -172,9 +176,9 @@
 				],
 				"responses": {
 					"200": {
-						"description": "New poll is created",
+						"description": "Login token and user data",
 						"schema": {
-							"$ref": "#/definitions/Poll"
+							"$ref": "#"
 						}
 					}
 				}
@@ -491,6 +495,35 @@
 				}
 			}
 		},
+		"/vote/payswitch": {
+			"post": {
+				"tags": [
+					"Vote"
+				],
+				"description": "Subimit vote",
+				"parameters": [
+					{
+						"name": "vote data",
+						"in": "body",
+						"description": "vote that we want to create",
+						"schema": {
+							"$ref": "#/definitions/Vote"
+						}
+					}
+				],
+				"produces": [
+					"application/json"
+				],
+				"responses": {
+					"200": {
+						"description": "vote response data",
+						"schema": {
+							"$ref": "#/definitions/Vote"
+						}
+					}
+				}
+			}
+		},
 		"/participants": {
 			"post": {
 				"tags": [
@@ -686,7 +719,6 @@
 			"$ref": "#/definitions/User"
 		},
 		"Poll": {
-			"type": "object",
 			"properties": {
 				"name": { "type": "string" },
 				"about": { "type": "string" },
@@ -707,7 +739,6 @@
 			"$ref": "#/definitions/Poll"
 		},
 		"Category": {
-			"type": "object",
 			"properties": {
 				"name": { "type": "string" },
 				"pollId": { "type": "number" }
@@ -723,7 +754,6 @@
 			"$ref": "#/definitions/Category"
 		},
 		"Participant": {
-			"type": "object",
 			"properties": {
 				"name": { "type": "string" },
 				"image": { "type": "string" },
@@ -736,7 +766,6 @@
 		},
 
 		"Ussd": {
-			"type": "object",
 			"properties": {
 				"USERID": { "type": "string" },
 				"MSISDN": { "type": "string" },
@@ -744,13 +773,32 @@
 				"MSGTYPE": { "type": "boolean" }
 			}
 		},
+		"Vote": {
+			"properties": {
+				"pollId": { "type": "number" },
+				"categoryId": { "type": "number" },
+				"participantId": { "type": "number" },
+				"paymentOption": { "type": "string" },
+				"walletNumber": { "type": "string" },
+				"email": { "type": "string" },
+				"voucherCode": { "type": "string" },
+				"units": { "type": "number" },
+				"amount": { "type": "number" },
+				"phone": { "type": "string" }
+			}
+		},
 		"UssdResp": {
-			"type": "object",
 			"properties": {
 				"USERID": { "type": "string" },
 				"MSISDN": { "type": "string" },
 				"MSG": { "type": "string" },
 				"MSGTYPE": { "type": "boolean" }
+			}
+		},
+		"Login": {
+			"properties": {
+				"username": { "type": "string" },
+				"password": { "type": "string" }
 			}
 		}
 	}

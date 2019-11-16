@@ -22,9 +22,19 @@ router.get('/polls', (_req, res) => {
 		});
 });
 
-router.get('/polls/:id', passport.authenticate('jwt', { session: false }), (req, res) => {
+router.get('/polls/:id', (req, res) => {
 	const id = req.params.id;
-	Poll.findByPk(id)
+	Poll.findOne({
+		where: { id },
+		include: [
+			{
+				model: Category,
+				include: [
+					{ model: Participant }
+				]
+			}
+		]
+	})
 		.then((poll) => {
 			if (poll) {
 				res.status(status.OK).send(poll);

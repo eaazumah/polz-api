@@ -19,10 +19,8 @@ const updateParticipantSchema = {
 	type: 'object',
 	properties: {
 		name: { type: 'string' },
-		image: { type: 'string' },
-		categoryId: { type: 'number' }
+		image: { type: 'string' }
 	},
-
 	additionalProperties: false
 };
 

@@ -6,6 +6,7 @@ import pollRouter from './routes/routes.polls';
 import categoryRouter from './routes/routes.category';
 import ussdRouter from './routes/routes.ussd';
 import authRouter from './routes/routes.auth';
+import voteRouter from './routes/routes.vote';
 import participantRouter from './routes/routes.participants';
 const swaggerUi = require('swagger-ui-express');
 import swaggerDocument from './swagger.json';
@@ -48,9 +49,10 @@ app.use('/api/v1/docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 app.use('/api/v1', authRouter);
 app.use('/api/v1', userRouter);
 app.use('/api/v1', pollRouter);
+app.use('/api/v1', ussdRouter);
+app.use('/api/v1', voteRouter);
 app.use('/api/v1', passport.authenticate('jwt', { session: false }), categoryRouter);
 app.use('/api/v1', passport.authenticate('jwt', { session: false }), participantRouter);
-app.use('/api/v1', ussdRouter);
 
 /**
  * OAuth authentication routes. (Sign in)

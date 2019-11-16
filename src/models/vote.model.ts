@@ -9,6 +9,8 @@ import {
 	BelongsTo
 } from 'sequelize-typescript';
 import { Participant } from './participants.model';
+import { Poll } from './poll.model';
+import { Category } from './category.model';
 
 @Table({
 	timestamps: true,
@@ -42,20 +44,18 @@ export class Vote extends Model<Vote> {
 	@Column({
 		allowNull: false
 	})
-	paymentAccountType: string;
+	paymentOption: string;
 
 	@Column({
 		allowNull: false
 	})
-	paymentAccountId: string;
+	walletNumber: string;
 
 	@Column({
 		allowNull: false,
 		defaultValue: ''
 	})
 	voucher: string;
-
-	@Column expiryDate: Date;
 
 	@CreatedAt createOn: Date;
 
@@ -67,6 +67,20 @@ export class Vote extends Model<Vote> {
 	@Column
 	participantId: number;
 
+	@ForeignKey(() => Category)
+	@Column
+	categoryId: number;
+
+	@ForeignKey(() => Poll)
+	@Column
+	pollId: number;
+
 	@BelongsTo(() => Participant)
 	participant: Participant;
+
+	@BelongsTo(() => Category)
+	category: Category;
+
+	@BelongsTo(() => Poll)
+	poll: Poll;
 }

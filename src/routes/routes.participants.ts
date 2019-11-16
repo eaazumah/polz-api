@@ -72,8 +72,9 @@ router.post('/participants', (req, res) => {
 								image = upload(image, filename);
 								await participants.update({ image });
 								res.status(status.CREATED).send(participants);
+							} else {
+								res.status(status.CREATED).send(participants);
 							}
-							res.status(status.CREATED).send(participants);
 						})
 						.catch((err) => {
 							// tslint:disable-next-line: no-console

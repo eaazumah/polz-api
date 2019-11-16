@@ -2,23 +2,25 @@ import Ajv from 'ajv';
 const ajv = new Ajv({ allErrors: true });
 
 const createVoteSchema = {
-	type: 'Object',
+	type: 'object',
 	properties: {
 		pollId: { type: 'number' },
 		categoryId: { type: 'number' },
 		participantId: { type: 'number' },
-		paymentAccountType: { type: 'string' },
-		paymentAccountId: { type: 'string' },
+		paymentOption: { type: 'string' },
+		walletNumber: { type: 'string' },
 		email: { format: 'email' },
-		voucher: { type: 'string' },
+		voucherCode: { type: 'string' },
 		units: { type: 'number' },
+		amount: { type: 'number' },
 		phone: { type: 'string' }
 	},
 	required: [
+		'pollId',
 		'categoryId',
 		'participantId',
-		'paymentAccountType',
-		'paymentAccountId',
+		'paymentOption',
+		'walletNumber',
 		'units',
 		'phone'
 	],

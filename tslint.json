@@ -9,7 +9,7 @@
 		"object-literal-sort-keys": false,
 		"interface-name": false,
 		"no-consecutive-blank-lines": false,
-		"no-object-literal-type-assertion": false,
+		"no-object-literal-type-assertion": true,
 		"no-unused-expression": false,
 		"trailing-comma": false,
 		"ordered-imports": false,
@@ -57,6 +57,10 @@
 			"check-format",
 			"allow-leading-underscore",
 			"allow-pascal-case"
+		],
+		"object-literal-key-quotes": [
+			true,
+			"consistent-as-needed"
 		],
 		"indent": [
 			true,

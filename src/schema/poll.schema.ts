@@ -32,9 +32,6 @@ const updatePollSchema = {
 		expiryDate: { format: 'date-time' },
 		image: { type: 'string' }
 	},
-	required: [
-		'id'
-	],
 	additionalProperties: false
 };
 
