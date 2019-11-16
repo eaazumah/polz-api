@@ -14,6 +14,10 @@ const sequelize = new Sequelize({
 	dialect: CONFIG.db_dialect as 'mysql' | 'postgres',
 	username: CONFIG.db_user,
 	password: CONFIG.db_password,
+	host: CONFIG.db_host,
+	dialectOptions: {
+		socketPath: CONFIG.db_host
+	},
 	models: [
 		User,
 		Poll,

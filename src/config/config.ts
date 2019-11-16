@@ -1,5 +1,5 @@
 // tslint:disable-next-line: no-implicit-dependencies
-// require('dotenv').config(); // instatiate environment variables
+require('dotenv').config(); // instatiate environment variables
 
 const CONFIG: any = {
 	app: '',
@@ -14,6 +14,8 @@ const CONFIG: any = {
 	jwt_expiration: 0,
 	bcrypt_salt: 11 || ''
 }; // Make this global to use all over the application
+
+const env = process.env.NODE_ENV || 'dev';
 
 CONFIG.app = process.env.APP || 'dev';
 CONFIG.port = process.env.PORT || '3000';
