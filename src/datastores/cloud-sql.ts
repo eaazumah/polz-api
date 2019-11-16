@@ -1,16 +1,7 @@
-// import { Sequelize } from 'sequelize'; // Option 1: Passing parameters separately
-// export const sequelize = new Sequelize('polzDB', 'root', 'Az123456789', {
-// 	host: 'localhost',
-// 	dialect: 'mysql'
-// });
-
 import { Sequelize } from 'sequelize-typescript';
 import { User, Category, Poll, Participant, Vote } from '../models';
 import CONFIG from '../config/config';
 import logger from '../util/logger';
-
-// tslint:disable-next-line: no-console
-console.log(CONFIG);
 
 const sequelize = new Sequelize({
 	database: CONFIG.db_name,
@@ -18,9 +9,6 @@ const sequelize = new Sequelize({
 	username: CONFIG.db_user,
 	password: CONFIG.db_password,
 	host: CONFIG.db_host,
-	dialectOptions: {
-		socketPath: CONFIG.db_host
-	},
 	models: [
 		User,
 		Poll,
@@ -42,7 +30,6 @@ const resetDb = async (): Promise<boolean> => {
 	}
 	return true;
 };
-
 // tslint:disable-next-line: space-before-function-paren
 const syncDb = async (): Promise<boolean> => {
 	try {

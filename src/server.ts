@@ -1,5 +1,4 @@
 import errorHandler from 'errorhandler';
-
 import app from './app';
 import { createServer } from 'http';
 import { syncDb, resetDb } from './datastores/cloud-sql';
@@ -14,6 +13,7 @@ app.use(errorHandler());
  */
 require('./datastores/cloud-sql');
 const server = app.listen(app.get('port'), () => {
+	syncDb();
 	// tslint:disable-next-line: no-console
 	console.log(
 		'  App is running at http://localhost:%d in %s mode',
@@ -24,7 +24,7 @@ const server = app.listen(app.get('port'), () => {
 	console.log('  Press CTRL-C to stop\n');
 });
 
-const port = app.get('port');
+// const port = app.get('port');
 // const server = (async () => {
 // 	await syncDb();
 // 	// await resetDb();
