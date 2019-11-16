@@ -76,7 +76,7 @@ router.post('/polls', passport.authenticate('jwt', { session: false }), (req, re
 						delete data.image;
 					}
 					Poll.create(data)
-						.then(async (poll) => {
+						.then(async(poll) => {
 							if (image) {
 								const filename = `polls/${poll.id}`;
 								image = upload(image, filename);
