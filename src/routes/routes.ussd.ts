@@ -1,14 +1,12 @@
 import { Router } from 'express';
 import status from 'http-status';
-import redis from 'redis';
 import msg from '../util/msg.builder';
 import { Poll } from '../models/poll.model';
 import { Category } from '../models/category.model';
 import { Participant } from '../models/participants.model';
 import { ussdValidator } from '../schema/ussd.schema';
 import { decodeSession } from '../util/session.decoder';
-
-const client = redis.createClient();
+import client from '../datastores/redis';
 
 const router = Router();
 

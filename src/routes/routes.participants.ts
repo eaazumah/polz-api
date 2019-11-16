@@ -7,7 +7,6 @@ import {
 import { Participant } from '../models/participants.model';
 import { Category } from '../models/category.model';
 import { upload } from '../datastores/storage';
-
 const router = express.Router();
 
 router.get('/participants', (_req, res) => {
@@ -66,7 +65,7 @@ router.post('/participants', (req, res) => {
 						delete data.image;
 					}
 					Participant.create(data)
-						.then(async(participants) => {
+						.then(async (participants) => {
 							if (image) {
 								const filename = `participants/${participants.id}`;
 								image = upload(image, filename);

@@ -1,7 +1,6 @@
 import express from 'express';
 import status from 'http-status';
 import * as pollSchema from '../schema/poll.schema';
-import redis from 'redis';
 import { Poll } from '../models/poll.model';
 import { User } from '../models/user.model';
 import { Category } from '../models/category.model';
@@ -9,9 +8,7 @@ import { Participant } from '../models/participants.model';
 import { getNewCode } from '../util/code.generator';
 import passport from 'passport';
 import { upload } from '../datastores/storage';
-const client = redis.createClient(process.env.REDISCLOUD_URL || '127.0.0.1:6379', {
-	no_ready_check: true
-});
+import client from '../datastores/redis';
 const router = express.Router();
 
 router.get('/polls', (_req, res) => {
