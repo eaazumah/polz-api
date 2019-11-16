@@ -9,7 +9,9 @@ import { Participant } from '../models/participants.model';
 import { getNewCode } from '../util/code.generator';
 import passport from 'passport';
 import { upload } from '../datastores/storage';
-const client = redis.createClient();
+const client = redis.createClient(process.env.REDISCLOUD_URL || '127.0.0.1:6379', {
+	no_ready_check: true
+});
 const router = express.Router();
 
 router.get('/polls', (_req, res) => {
@@ -76,7 +78,8 @@ router.post('/polls', passport.authenticate('jwt', { session: false }), (req, re
 						delete data.image;
 					}
 					Poll.create(data)
-						.then(async(poll) => {
+						// tslint:disable-next-line: space-before-function-paren
+						.then(async (poll) => {
 							if (image) {
 								const filename = `polls/${poll.id}`;
 								image = upload(image, filename);
