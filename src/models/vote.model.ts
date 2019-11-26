@@ -25,9 +25,14 @@ export class Vote extends Model<Vote> {
 
 	@Column({
 		allowNull: false,
-		defaultValue: 'pendding'
+		defaultValue: 'PROGRESS'
 	})
 	status: string;
+
+	@Column({
+		allowNull: false
+	})
+	transactionId: string;
 
 	@Column({
 		allowNull: false,
@@ -40,22 +45,6 @@ export class Vote extends Model<Vote> {
 		defaultValue: 0.0
 	})
 	amount: number;
-
-	@Column({
-		allowNull: false
-	})
-	paymentOption: string;
-
-	@Column({
-		allowNull: false
-	})
-	walletNumber: string;
-
-	@Column({
-		allowNull: false,
-		defaultValue: ''
-	})
-	voucher: string;
 
 	@CreatedAt createOn: Date;
 

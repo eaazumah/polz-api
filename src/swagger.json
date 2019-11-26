@@ -524,6 +524,35 @@
 				}
 			}
 		},
+		"/vote/redde": {
+			"post": {
+				"tags": [
+					"Vote"
+				],
+				"description": "Subimit vote",
+				"parameters": [
+					{
+						"name": "vote data",
+						"in": "body",
+						"description": "vote that we want to create",
+						"schema": {
+							"$ref": "#/definitions/Vote"
+						}
+					}
+				],
+				"produces": [
+					"application/json"
+				],
+				"responses": {
+					"200": {
+						"description": "vote response data",
+						"schema": {
+							"$ref": "#/definitions/Vote"
+						}
+					}
+				}
+			}
+		},
 		"/participants": {
 			"post": {
 				"tags": [

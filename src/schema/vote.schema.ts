@@ -7,7 +7,13 @@ const createVoteSchema = {
 		pollId: { type: 'number' },
 		categoryId: { type: 'number' },
 		participantId: { type: 'number' },
-		paymentOption: { type: 'string' },
+		paymentOption: {
+			enum: [
+				'MTN',
+				'AIRTELTIGO',
+				'VODAFONE'
+			]
+		},
 		walletNumber: { type: 'string' },
 		email: { format: 'email' },
 		voucherCode: { type: 'string' },
@@ -27,27 +33,43 @@ const createVoteSchema = {
 	additionalProperties: false
 };
 
-// const updateVoteSchema = {
-// 	type: 'Object',
-// 	properties: {
-// 		id: { type: 'string' },
-// 		categoryId: { type: 'string' },
-// 		participantId: { type: 'string' },
-// 		status: { type: 'string' },
-// 		units: { type: 'number' },
-// 		phone: { type: 'string' }
-// 	},
-// 	required: [
-// 		'id'
-// 	],
-// 	additionalProperties: false
-// };
+const reddeCallbackSchema = {
+	type: 'object',
+	properties: {
+		reason: { type: 'string' },
+		clienttransid: { type: 'string' },
+		clientreference: { type: 'string' },
+		telcotransid: { type: 'string' },
+		transactionid: { type: 'string' },
+		statusdate: { type: 'string' },
+		status: {
+			enum: [
+				'PAID',
+				'PROGRESS',
+				'FAILED',
+				'PENDING'
+			]
+		}
+	},
+	required: [
+		'reason',
+		'status'
+	],
+	additionalProperties: false
+};
 
 const createVoteValidate = ajv.compile(createVoteSchema);
 export const createVoteValidator = (data: any) => {
 	const valid = createVoteValidate(data);
 	if (valid) return { valid, data };
 	else return { valid, error: createVoteValidate.errors };
+};
+
+const reddeCallbackValidate = ajv.compile(reddeCallbackSchema);
+export const reddeCallbackValidator = (data: any) => {
+	const valid = reddeCallbackValidate(data);
+	if (valid) return { valid, data };
+	else return { valid, error: reddeCallbackValidate.errors };
 };
 
 // const updateVoteValidate = ajv.compile(updateVoteSchema);
