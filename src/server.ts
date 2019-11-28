@@ -1,6 +1,5 @@
 import errorHandler from 'errorhandler';
 import app from './app';
-import { createServer } from 'http';
 import { syncDb, resetDb } from './datastores/cloud-sql';
 
 /**

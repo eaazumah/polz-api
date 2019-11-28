@@ -12,7 +12,7 @@ const axios = require('axios').default;
 import CONFIG from '../config/config';
 import { Poll } from '../models';
 
-router.post('/vote/redde', async (req, res) => {
+router.post('/vote/redde', async(req, res) => {
 	const voteData = req.body;
 	try {
 		const { data, valid, error } = voteSchema.createVoteValidator(voteData);
@@ -92,7 +92,7 @@ router.post('/vote/redde', async (req, res) => {
 	}
 });
 
-router.post('/payment/redde/callback', async (req, res) => {
+router.post('/payment/redde/callback', async(req, res) => {
 	const reqBody = req.body;
 	try {
 		const { data, valid, error } = voteSchema.reddeCallbackValidator(reqBody);
