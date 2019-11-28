@@ -9,7 +9,7 @@
 			"url": "https://opensource.org/licenses/MIT"
 		}
 	},
-	"host": "https://polzapp.herokuapp.com/",
+	"host": "https://polzapp.herokuapp.com",
 	"basePath": "/api/v1",
 	"tags": [
 		{
