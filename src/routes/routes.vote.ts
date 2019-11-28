@@ -106,6 +106,8 @@ router.post('/payment/redde/callback', async(req, res) => {
 			statusdate,
 			brandtransid
 		} = data;
+		// tslint:disable-next-line: no-console
+		console.log(data);
 		const vote = await Vote.findOne({
 			where: {
 				transactionId: transactionid
@@ -114,7 +116,6 @@ router.post('/payment/redde/callback', async(req, res) => {
 		if (!vote) throw Error('Transaction not found');
 
 		// tslint:disable-next-line: no-console
-		console.log(data);
 		// tslint:disable-next-line: no-console
 		console.log(vote);
 

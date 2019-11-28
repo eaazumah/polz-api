@@ -52,10 +52,8 @@ const reddeCallbackSchema = {
 		}
 	},
 	required: [
-		'reason',
 		'status'
-	],
-	additionalProperties: false
+	]
 };
 
 const createVoteValidate = ajv.compile(createVoteSchema);
