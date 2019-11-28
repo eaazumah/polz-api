@@ -75,7 +75,7 @@ router.post('/vote/redde', async (req, res) => {
 							res.send(vote);
 						})
 						.catch((err) => {
-							res.status(500).send(err.error);
+							res.status(500).send(error);
 						});
 				} else if (status === 'FAILED') {
 					res.status(500).send(data);
