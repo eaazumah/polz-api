@@ -40,7 +40,7 @@ const reddeCallbackSchema = {
 		clienttransid: { type: 'string' },
 		clientreference: { type: 'string' },
 		telcotransid: { type: 'string' },
-		transactionid: { type: 'string' },
+		transactionid: { type: 'number' },
 		statusdate: { type: 'string' },
 		status: {
 			enum: [

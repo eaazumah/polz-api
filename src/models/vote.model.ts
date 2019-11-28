@@ -32,7 +32,7 @@ export class Vote extends Model<Vote> {
 	@Column({
 		allowNull: false
 	})
-	transactionId: string;
+	transactionId: number;
 
 	@Column({
 		allowNull: false,
