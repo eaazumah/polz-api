@@ -10,7 +10,7 @@ const request = require('request');
 const axios = require('axios').default;
 
 import CONFIG from '../config/config';
-import { Poll } from '../models';
+import { Poll, Category, Participant } from '../models';
 
 router.post('/vote/redde', async (req, res) => {
 	const voteData = req.body;
@@ -100,8 +100,6 @@ router.post('/payment/redde/callback', async (req, res) => {
 	try {
 		const { data, valid, error } = voteSchema.reddeCallbackValidator(reqBody);
 		// tslint:disable-next-line: no-console
-		console.log(error);
-		// tslint:disable-next-line: no-console
 		console.log(data);
 
 		if (!valid) throw error;
@@ -122,20 +120,25 @@ router.post('/payment/redde/callback', async (req, res) => {
 			}
 		});
 		if (!vote) throw Error('Transaction not found');
-
-		// tslint:disable-next-line: no-console
-		// tslint:disable-next-line: no-console
-		console.log(vote);
-
 		vote
 			.update({ status })
-			.then((result) => {
+			.then(async (result) => {
 				// tslint:disable-next-line: no-console
 				console.log(result);
+				const poll = vote.poll;
+				// tslint:disable-next-line: no-console
+				console.log(poll);
+
+				const participant = vote.participant;
+				// tslint:disable-next-line: no-console
+				console.log(participant);
+
 				if (status === 'PAID') {
 					/*
 				     send sms to voter about successful vote
 				    */
+					// tslint:disable-next-line: no-console
+					console.log(data);
 				} else if (status === 'PENDING' || status === 'PROGRESS') {
 					/*
 				     do nothing
