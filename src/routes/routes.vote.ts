@@ -75,16 +75,19 @@ router.post('/vote/redde', async (req, res) => {
 							res.send(vote);
 						})
 						.catch((err) => {
-							res.status(500).send(error);
+							// tslint:disable-next-line: no-shadowed-variable
+							// tslint:disable-next-line: no-console
+							console.log(err);
+							res.status(500).send(err);
 						});
-				} else if (status === 'FAILED') {
+				} else {
 					res.status(500).send(data);
 				}
 			})
 			// tslint:disable-next-line: no-shadowed-variable
 			.catch((error: any) => {
 				// tslint:disable-next-line: no-console
-				console.log(error);
+				// tslint:disable-next-line: no-console
 				res.status(status.INTERNAL_SERVER_ERROR).send(error);
 			});
 	} catch (error) {
