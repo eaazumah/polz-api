@@ -125,30 +125,43 @@ router.post('/payment/redde/callback', async (req, res) => {
 			.then(async (result) => {
 				// tslint:disable-next-line: no-console
 				console.log(result);
-				const poll = vote.poll;
-				// tslint:disable-next-line: no-console
-				console.log(poll);
-
-				const participant = vote.participant;
-				// tslint:disable-next-line: no-console
-				console.log(participant);
-
-				if (status === 'PAID') {
-					/*
-				     send sms to voter about successful vote
-				    */
-					// tslint:disable-next-line: no-console
-					console.log(data);
-				} else if (status === 'PENDING' || status === 'PROGRESS') {
-					/*
-				     do nothing
-				    */
-					res.end();
-				} else if (status === 'FAILED') {
-					/*
-				     send sms to voter about failed vote
-				    */
+				const poll = await Poll.findByPk(vote.pollId);
+				const category = await Category.findByPk(vote.categoryId);
+				const participant = await Participant.findByPk(vote.participantId);
+				if (poll && category && participant) {
+					if (status === 'PAID') {
+						/*
+						 send sms to voter about successful vote
+						*/
+						// tslint:disable-next-line: no-console
+						const msg =
+							'Your vote for ' +
+							participant.name +
+							' has been completed successfully.';
+						// tslint:disable-next-line: no-console
+						console.log(msg);
+						res.end();
+					} else if (status === 'PENDING' || status === 'PROGRESS') {
+						/*
+						 do nothing
+						*/
+						res.end();
+					} else if (status === 'FAILED') {
+						/*
+						 send sms to voter about failed vote
+						*/
+						const msg =
+							'Your vote for ' +
+							participant.name +
+							' was not completed successfully.';
+						// tslint:disable-next-line: no-console
+						console.log(msg);
+					} else {
+						res.end();
+					}
 				} else {
+					// tslint:disable-next-line: no-console
+					console.log(poll);
 					res.end();
 				}
 			})
