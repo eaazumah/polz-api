@@ -6,11 +6,11 @@ import { Base64 } from 'js-base64';
 import uuid from 'uuid/v4';
 import { Vote } from '../models/vote.model';
 const router = express.Router();
-const request = require('request');
 const axios = require('axios').default;
 
 import CONFIG from '../config/config';
 import { Poll, Category, Participant } from '../models';
+import { sendSms } from '../services';
 
 router.post('/vote/redde', async (req, res) => {
 	const voteData = req.body;
@@ -113,7 +113,6 @@ router.post('/payment/redde/callback', async (req, res) => {
 			brandtransid
 		} = data;
 		// tslint:disable-next-line: no-console
-		console.log(data);
 		const vote = await Vote.findOne({
 			where: {
 				transactionId: transactionid
@@ -140,6 +139,7 @@ router.post('/payment/redde/callback', async (req, res) => {
 							' has been completed successfully.';
 						// tslint:disable-next-line: no-console
 						console.log(msg);
+						sendSms(msg, vote.phone);
 						res.end();
 					} else if (status === 'PENDING' || status === 'PROGRESS') {
 						/*
@@ -156,12 +156,13 @@ router.post('/payment/redde/callback', async (req, res) => {
 							' was not completed successfully.';
 						// tslint:disable-next-line: no-console
 						console.log(msg);
+						sendSms(msg, vote.phone);
+						res.end();
 					} else {
 						res.end();
 					}
 				} else {
 					// tslint:disable-next-line: no-console
-					console.log(poll);
 					res.end();
 				}
 			})
