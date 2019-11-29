@@ -25,5 +25,8 @@ export const sendSms = (msg: string, recipient: string) => {
 			// tslint:disable-next-line: no-console
 			console.log(result);
 		})
-		.catch(() => {});
+		.catch((error: any) => {
+			// tslint:disable-next-line: no-console
+			console.log(error);
+		});
 };
