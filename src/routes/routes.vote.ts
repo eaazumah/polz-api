@@ -123,7 +123,6 @@ router.post('/payment/redde/callback', async (req, res) => {
 			.update({ status })
 			.then(async (result) => {
 				// tslint:disable-next-line: no-console
-				console.log(result);
 				const poll = await Poll.findByPk(vote.pollId);
 				const category = await Category.findByPk(vote.categoryId);
 				const participant = await Participant.findByPk(vote.participantId);
@@ -229,7 +228,6 @@ router.post('/vote/payswitch', (req, res) => {
 			})
 			.catch((err: any) => {
 				// tslint:disable-next-line: no-console
-				console.log(err);
 				res.status(status.INTERNAL_SERVER_ERROR).send(err);
 			});
 	} catch (error) {
