@@ -1,0 +1,27 @@
+{
+    "compilerOptions": {
+        "types": [],
+        "resolveJsonModule": true,
+        "esModuleInterop": true,
+        "target": "ES2017",
+        "module": "commonjs",
+        "typeRoots": [ "node_modules/@types/" ],
+        "emitDecoratorMetadata": true,
+        "experimentalDecorators": true,
+        "allowSyntheticDefaultImports": true,
+        "noImplicitAny": true,
+        "moduleResolution": "node",
+        "sourceMap": true,
+        "outDir": "dist",
+        "baseUrl": ".",
+        "paths": {
+            "*": [
+                "node_modules/*",
+                "src/types/*"
+            ]
+        }
+    },
+    "include": [
+        "src/**/*"
+    ]
+}
